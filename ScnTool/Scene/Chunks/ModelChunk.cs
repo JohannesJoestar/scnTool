@@ -6,7 +6,9 @@ using System.Numerics;
 using System.Text;
 
 namespace NetsphereScnTool.Scene.Chunks {
+
     public class ModelChunk : SceneChunk {
+
         public override ChunkType ChunkType => ChunkType.ModelData;
 
         public Shader Shader { get; set; }
@@ -15,8 +17,7 @@ namespace NetsphereScnTool.Scene.Chunks {
         public IList<WeightBone> WeightBone { get; set; }
         public IList<ModelAnimation> Animation { get; set; }
 
-        public ModelChunk(SceneContainer container)
-            : base(container) {
+        public ModelChunk (SceneContainer container) : base(container) {
             Shader = Shader.None;
             TextureData = new TextureData(this);
             Mesh = new MeshData(this);
@@ -71,6 +72,7 @@ namespace NetsphereScnTool.Scene.Chunks {
     }
 
     public class MeshData : IManualSerializer {
+
         public ModelChunk ModelChunk { get; }
 
         public List<Vector3> Vertices { get; set; }

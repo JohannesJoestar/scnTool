@@ -4,7 +4,9 @@ using System.IO;
 using System.Numerics;
 
 namespace NetsphereScnTool.Scene.Chunks {
+
     public abstract class SceneChunk : IManualSerializer {
+
         public SceneContainer Container { get; private set; }
 
         public abstract ChunkType ChunkType { get; }
@@ -14,8 +16,7 @@ namespace NetsphereScnTool.Scene.Chunks {
         public float Version { get; set; }
         public Matrix4x4 Matrix { get; set; }
 
-
-        //Personal Use
+        // Personal Use
         public ParentGrade Grade { get; set; }
         public Image Image { get; set; }
 
