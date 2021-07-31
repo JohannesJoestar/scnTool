@@ -17,7 +17,7 @@ namespace NetsphereScnTool.Scene.Chunks {
         public IList<WeightBone> WeightBone { get; set; }
         public IList<ModelAnimation> Animation { get; set; }
 
-        public ModelChunk (SceneContainer container) : base(container) {
+        public ModelChunk(SceneContainer container) : base(container) {
             Shader = Shader.None;
             TextureData = new TextureData(this);
             Mesh = new MeshData(this);
@@ -212,6 +212,7 @@ namespace NetsphereScnTool.Scene.Chunks {
 
     // Game::CActorGeomData
     public class TextureData : IManualSerializer {
+
         public float Version { get; set; }
         public ModelChunk ModelChunk { get; }
         public uint ExtraUV { get; set; }
