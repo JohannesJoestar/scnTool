@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Text;
 
 namespace NetsphereScnTool.Scene.Chunks {
     public class ModelChunk : SceneChunk {
@@ -48,7 +49,7 @@ namespace NetsphereScnTool.Scene.Chunks {
         public override void Deserialize(Stream stream) {
             base.Deserialize(stream);
 
-            using (var r = stream.ToBinaryReader(true)) {
+            using (var r = stream.ToBinaryReader(Encoding.ASCII, true)) {
                 // ## CoreLib::Scene::CRenderable
                 Version = r.ReadSingle();
                 Shader = r.ReadEnum<Shader>();

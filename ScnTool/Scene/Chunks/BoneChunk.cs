@@ -1,6 +1,7 @@
 ﻿using BlubLib.IO;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace NetsphereScnTool.Scene.Chunks {
     public class BoneChunk : SceneChunk {
@@ -37,7 +38,7 @@ namespace NetsphereScnTool.Scene.Chunks {
         public override void Deserialize(Stream stream) {
             base.Deserialize(stream);
 
-            using (var r = stream.ToBinaryReader(true)) {
+            using (var r = stream.ToBinaryReader(Encoding.ASCII, true)) {
                 Version = r.ReadSingle();
 
                 uint count = r.ReadUInt32();
