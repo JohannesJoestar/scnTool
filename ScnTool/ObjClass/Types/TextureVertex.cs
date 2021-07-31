@@ -1,9 +1,7 @@
 using System;
 
-namespace ObjParser.Types
-{
-    public class TextureVertex : IType
-    {
+namespace ObjParser.Types {
+    public class TextureVertex : IType {
         public const int MinimumDataLength = 3;
         public const string Prefix = "vt";
 
@@ -13,8 +11,7 @@ namespace ObjParser.Types
 
         public int Index { get; set; }
 
-        public void LoadFromStringArray(string[] data)
-        {
+        public void LoadFromStringArray(string[] data) {
             if (data.Length < MinimumDataLength)
                 throw new ArgumentException("Input array must be of minimum length " + MinimumDataLength, "data");
 

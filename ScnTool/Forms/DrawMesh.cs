@@ -5,10 +5,8 @@ using System.Drawing;
 using System.Numerics;
 using System.Windows.Forms;
 
-namespace NetsphereScnTool.Forms
-{
-    public partial class DrawMesh : Form
-    {
+namespace NetsphereScnTool.Forms {
+    public partial class DrawMesh : Form {
         private readonly MeshData _mesh;
         private float rotationx = 1.00f;
         private float rotationy = 0.00f;
@@ -19,8 +17,7 @@ namespace NetsphereScnTool.Forms
         private bool Fill = false;
         private bool Light = true;
 
-        public DrawMesh(MeshData mesh)
-        {
+        public DrawMesh(MeshData mesh) {
             InitializeComponent();
             DoubleBuffered = true;
 
@@ -29,8 +26,7 @@ namespace NetsphereScnTool.Forms
             float maxX = 0;
             float maxY = 0;
 
-            foreach (var v in _mesh.Vertices)
-            {
+            foreach (var v in _mesh.Vertices) {
                 float absX = Math.Abs(v.X);
                 float absY = Math.Abs(v.Y);
                 float absZ = Math.Abs(v.Z);
@@ -58,8 +54,7 @@ namespace NetsphereScnTool.Forms
 
         private bool IsClockwise(PointF p1, PointF p2, PointF p3) => (p2.X - p1.X) * (p3.Y - p1.Y) - (p2.Y - p1.Y) * (p3.X - p1.X) >= 0;
 
-        private void DrawMesh_Paint(object sender, PaintEventArgs e)
-        {
+        private void DrawMesh_Paint(object sender, PaintEventArgs e) {
             float centerX = ClientSize.Width / 2.0f;
             float centerY = ClientSize.Height / 2.0f;
 
@@ -74,41 +69,31 @@ namespace NetsphereScnTool.Forms
             foreach (var v3 in _mesh.Vertices)
                 v3list.Add(Vector3.Transform(v3, transform));
 
-            for (int i = 0; i < _mesh.Faces.Count; i++)
-            {
-                var p1 = new PointF(v3list[(int)_mesh.Faces[i].X].X + centerX, v3list[(int)_mesh.Faces[i].X].Y + centerY);
-                var p2 = new PointF(v3list[(int)_mesh.Faces[i].Y].X + centerX, v3list[(int)_mesh.Faces[i].Y].Y + centerY);
-                var p3 = new PointF(v3list[(int)_mesh.Faces[i].Z].X + centerX, v3list[(int)_mesh.Faces[i].Z].Y + centerY);
+            for (int i = 0; i < _mesh.Faces.Count; i++) {
+                var p1 = new PointF(v3list[(int) _mesh.Faces[i].X].X + centerX, v3list[(int) _mesh.Faces[i].X].Y + centerY);
+                var p2 = new PointF(v3list[(int) _mesh.Faces[i].Y].X + centerX, v3list[(int) _mesh.Faces[i].Y].Y + centerY);
+                var p3 = new PointF(v3list[(int) _mesh.Faces[i].Z].X + centerX, v3list[(int) _mesh.Faces[i].Z].Y + centerY);
 
-                if (Fill == true)
-                {
-                    if (IsClockwise(p1, p2, p3))
-                    {
+                if (Fill == true) {
+                    if (IsClockwise(p1, p2, p3)) {
                         var polygon = new PointF[] { p1, p2, p3 };
 
-                        if (Light == true)
-                        {
+                        if (Light == true) {
                             float maxZ = 0;
-                            foreach (var v in v3list)
-                            {
+                            foreach (var v in v3list) {
                                 float absZ = Math.Abs(v.Z);
 
                                 if (absZ > maxZ)
                                     maxZ = absZ;
                             }
 
-                            int grayscale = (int)(Math.Abs((v3list[(int)_mesh.Faces[i].X].Z + v3list[(int)_mesh.Faces[i].Y].Z + v3list[(int)_mesh.Faces[i].Z].Z) / 3) * 255 / maxZ);
+                            int grayscale = (int) (Math.Abs((v3list[(int) _mesh.Faces[i].X].Z + v3list[(int) _mesh.Faces[i].Y].Z + v3list[(int) _mesh.Faces[i].Z].Z) / 3) * 255 / maxZ);
 
                             e.Graphics.FillPolygon(new SolidBrush(Color.FromArgb(grayscale, grayscale, grayscale)), polygon);
-                        }
-
-                        else
+                        } else
                             e.Graphics.FillPolygon(Brushes.White, polygon);
                     }
-                }
-
-                else
-                {
+                } else {
                     e.Graphics.DrawLine(Pens.White, p1, p2);
                     e.Graphics.DrawLine(Pens.White, p2, p3);
                     e.Graphics.DrawLine(Pens.White, p1, p3);
@@ -118,10 +103,8 @@ namespace NetsphereScnTool.Forms
 
         private void DrawMesh_FormClosed(object sender, FormClosedEventArgs e) => Dispose();
 
-        private void DrawMesh_KeyDown(object sender, KeyEventArgs e)
-        {
-            switch (e.KeyCode)
-            {
+        private void DrawMesh_KeyDown(object sender, KeyEventArgs e) {
+            switch (e.KeyCode) {
                 case Keys.W:
                     rotationx += 0.1f;
                     break;
@@ -182,14 +165,11 @@ namespace NetsphereScnTool.Forms
             Refresh();
         }
 
-        private void DrawMesh_MouseWheel(object sender, MouseEventArgs e)
-        {
+        private void DrawMesh_MouseWheel(object sender, MouseEventArgs e) {
             if (e.Delta > 0)
                 scale += 0.05f;
-            else
-            {
-                if (scale > 0.05f)
-                {
+            else {
+                if (scale > 0.05f) {
                     scale -= 0.05f;
                 }
             }

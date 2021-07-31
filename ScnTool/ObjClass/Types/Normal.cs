@@ -1,9 +1,7 @@
 ﻿using System;
 
-namespace ObjParser.Types
-{
-    public class Normal : IType
-    {
+namespace ObjParser.Types {
+    public class Normal : IType {
         public const int MinimumDataLength = 4;
         public const string Prefix = "vn";
 
@@ -15,8 +13,7 @@ namespace ObjParser.Types
 
         public int Index { get; set; }
 
-        public void LoadFromStringArray(string[] data)
-        {
+        public void LoadFromStringArray(string[] data) {
             if (data.Length < MinimumDataLength)
                 throw new ArgumentException("Input array must be of minimum length " + MinimumDataLength, "data");
 

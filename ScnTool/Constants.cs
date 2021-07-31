@@ -1,7 +1,5 @@
-﻿namespace NetsphereScnTool
-{
-    public enum ComponentState
-    {
+﻿namespace NetsphereScnTool {
+    public enum ComponentState {
         Enable,
         Disable
     }

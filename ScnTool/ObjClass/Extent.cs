@@ -1,7 +1,5 @@
-﻿namespace ObjParser
-{
-    public class Extent
-    {
+﻿namespace ObjParser {
+    public class Extent {
         public double XMax { get; set; }
         public double XMin { get; set; }
         public double YMax { get; set; }

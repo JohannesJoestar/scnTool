@@ -4,50 +4,38 @@ using System.Globalization;
 using System.IO;
 using System.Numerics;
 
-namespace NetsphereScnTool.Utility
-{
-    public class Obj_Exporter
-    {
-        public void Export(string fileName, ModelChunk model)
-        {
-            try
-            { using (var fs = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None)) { } }
-            catch { fileName = fileName.Replace(model.Name, "invalid_file_name"); }
+namespace NetsphereScnTool.Utility {
+    public class Obj_Exporter {
+        public void Export(string fileName, ModelChunk model) {
+            try { using (var fs = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None)) { } } catch { fileName = fileName.Replace(model.Name, "invalid_file_name"); }
 
             using (var fs = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
-            using (var w = new StreamWriter(fs))
-            {
+            using (var w = new StreamWriter(fs)) {
                 WriteObject(w, model, fileName);
             }
             string mtl = Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(fileName) + ".mtl");
             using (var fs = new FileStream(mtl, FileMode.Create, FileAccess.Write, FileShare.None))
-            using (var w = new StreamWriter(fs))
-            {
+            using (var w = new StreamWriter(fs)) {
                 WriteMaterial(w, model);
             }
         }
-        public void Export(string fileName, ICollection<ModelChunk> models)
-        {
+        public void Export(string fileName, ICollection<ModelChunk> models) {
             using (var fs = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
-            using (var w = new StreamWriter(fs))
-            {
+            using (var w = new StreamWriter(fs)) {
                 WriteObject(w, models, fileName);
             }
             string mtl = Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(fileName) + ".mtl");
             using (var fs = new FileStream(mtl, FileMode.Create, FileAccess.Write, FileShare.None))
-            using (var w = new StreamWriter(fs))
-            {
+            using (var w = new StreamWriter(fs)) {
                 WriteMaterial(w, models);
             }
         }
 
-        private void WriteObject(TextWriter w, ModelChunk model, string fileName)
-        {
+        private void WriteObject(TextWriter w, ModelChunk model, string fileName) {
             w.WriteLine("mtllib {0}.mtl", Path.GetFileNameWithoutExtension(fileName));
             w.WriteLine();
 
-            foreach (var vertex in model.Mesh.Vertices)
-            {
+            foreach (var vertex in model.Mesh.Vertices) {
                 var v = Vector3.Transform(vertex, model.Matrix);  //Matrice invertita
                 w.WriteLine(string.Format(CultureInfo.InvariantCulture, "v {0:0.0000} {1:0.0000} {2:0.0000}", v.X / 100, v.Y / 100, v.Z / 100));
             }
@@ -60,8 +48,7 @@ namespace NetsphereScnTool.Utility
             w.WriteLine();
             w.WriteLine("g " + model.Name);
             // Face indices: S4 starts at 0 - Wavefront OBJ at 1
-            foreach (var texture in model.TextureData.Textures)
-            {
+            foreach (var texture in model.TextureData.Textures) {
                 string tex = texture.FileName;
                 foreach (char c in Path.GetInvalidPathChars())
                     tex = tex.Replace(c, '?');
@@ -74,8 +61,7 @@ namespace NetsphereScnTool.Utility
 
                 w.WriteLine("usemtl " + Path.GetFileNameWithoutExtension(tex));
                 w.WriteLine();
-                for (int i = texture.FaceCounter; i < (texture.FaceCount + texture.FaceCounter); i++)
-                {
+                for (int i = texture.FaceCounter; i < (texture.FaceCount + texture.FaceCounter); i++) {
                     var face = model.Mesh.Faces[i];
                     float x = face.X + 1;
                     float y = face.Y + 1;
@@ -85,11 +71,9 @@ namespace NetsphereScnTool.Utility
                 w.WriteLine();
             }
         }
-        private void WriteMaterial(TextWriter w, ModelChunk model)
-        {
+        private void WriteMaterial(TextWriter w, ModelChunk model) {
             var ls = new List<string>();
-            foreach (var texture in model.TextureData.Textures)
-            {
+            foreach (var texture in model.TextureData.Textures) {
                 string tex = texture.FileName;
                 foreach (char c in Path.GetInvalidPathChars())
                     tex = tex.Replace(c, '?');
@@ -120,33 +104,27 @@ namespace NetsphereScnTool.Utility
                 ls.Add(name);
             }
         }
-        private void WriteObject(TextWriter w, IEnumerable<ModelChunk> models, string fileName)
-        {
+        private void WriteObject(TextWriter w, IEnumerable<ModelChunk> models, string fileName) {
             w.WriteLine("mtllib {0}.mtl", Path.GetFileNameWithoutExtension(fileName));
             w.WriteLine();
             int vertexCounter = 0;
-            foreach (var model in models)
-            {
-                foreach (var vertex in model.Mesh.Vertices)
-                {
+            foreach (var model in models) {
+                foreach (var vertex in model.Mesh.Vertices) {
                     var v = Vector3.Transform(vertex, model.Matrix);
                     w.WriteLine(string.Format(CultureInfo.InvariantCulture, "v {0:0.0000} {1:0.0000} {2:0.0000}", v.X / 100, v.Y / 100, v.Z / 100));
                 }
                 w.WriteLine();
-                foreach (var vn in model.Mesh.Normals)
-                {
+                foreach (var vn in model.Mesh.Normals) {
                     w.WriteLine(string.Format(CultureInfo.InvariantCulture, "vn {0:0.0000} {1:0.0000} {2:0.0000}", vn.X / 100, vn.Y / 100, vn.Z / 100));
                 }
                 w.WriteLine();
-                foreach (var vt in model.Mesh.UV)
-                {
+                foreach (var vt in model.Mesh.UV) {
                     w.WriteLine(string.Format(CultureInfo.InvariantCulture, "vt {0:0.0000} {1:0.0000} {2:0.0000}", vt.X / 100, 0.0f - vt.Y / 100, 0.0f));
                 }
                 w.WriteLine();
                 w.WriteLine("g " + model.Name);
                 // Face indices: S4 starts at 0 - Wavefront OBJ at 1
-                foreach (var texture in model.TextureData.Textures)
-                {
+                foreach (var texture in model.TextureData.Textures) {
                     string tex = texture.FileName;
                     foreach (char c in Path.GetInvalidPathChars())
                         tex = tex.Replace(c, '?');
@@ -159,8 +137,7 @@ namespace NetsphereScnTool.Utility
 
                     w.WriteLine("usemtl " + Path.GetFileNameWithoutExtension(tex));
                     w.WriteLine();
-                    for (int i = texture.FaceCounter; i < (texture.FaceCount + texture.FaceCounter); i++)
-                    {
+                    for (int i = texture.FaceCounter; i < (texture.FaceCount + texture.FaceCounter); i++) {
                         var face = model.Mesh.Faces[i];
                         float x = face.X + 1 + vertexCounter;
                         float y = face.Y + 1 + vertexCounter;
@@ -172,13 +149,10 @@ namespace NetsphereScnTool.Utility
                 vertexCounter += model.Mesh.Vertices.Count;
             }
         }
-        private void WriteMaterial(TextWriter w, IEnumerable<ModelChunk> models)
-        {
+        private void WriteMaterial(TextWriter w, IEnumerable<ModelChunk> models) {
             var ls = new List<string>();
-            foreach (var model in models)
-            {
-                foreach (var texture in model.TextureData.Textures)
-                {
+            foreach (var model in models) {
+                foreach (var texture in model.TextureData.Textures) {
                     string tex = texture.FileName;
                     foreach (char c in Path.GetInvalidPathChars())
                         tex = tex.Replace(c, '?');

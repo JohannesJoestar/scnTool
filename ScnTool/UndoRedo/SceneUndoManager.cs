@@ -1,16 +1,12 @@
 ﻿using NetsphereScnTool.Scene;
 
-namespace NetsphereScnTool.UndoRedo
-{
-    public class SceneUndoManager : UndoSystem<SceneContainer>
-    {
+namespace NetsphereScnTool.UndoRedo {
+    public class SceneUndoManager : UndoSystem<SceneContainer> {
         public SceneUndoManager(uint max)
-          : base(max)
-        { }
+          : base(max) { }
 
-        public override void Save(SceneContainer @object)
-        {
-            var _container = (SceneContainer)@object.Clone();
+        public override void Save(SceneContainer @object) {
+            var _container = (SceneContainer) @object.Clone();
             base.Save(_container);
         }
 

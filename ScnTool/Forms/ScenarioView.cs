@@ -10,17 +10,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace NetsphereScnTool.Forms
-{
-    public partial class ScenarioView : Form
-    {
+namespace NetsphereScnTool.Forms {
+    public partial class ScenarioView : Form {
         private SceneContainer container;
         private SceneUndoManager undo_manager;
 
         private string container_path = string.Empty;
 
-        public ScenarioView()
-        {
+        public ScenarioView() {
             InitializeComponent();
 
             data_view.AutoGenerateColumns = false;
@@ -36,34 +33,28 @@ namespace NetsphereScnTool.Forms
         }
 
         #region Overrides
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-        {
-            if (keyData == (Keys.Control | Keys.Z))
-            {
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
+            if (keyData == (Keys.Control | Keys.Z)) {
                 undo();
                 return true;
             }
 
-            if (keyData == (Keys.Control | Keys.Y))
-            {
+            if (keyData == (Keys.Control | Keys.Y)) {
                 redo();
                 return true;
             }
 
-            if (keyData == (Keys.Control | Keys.S))
-            {
+            if (keyData == (Keys.Control | Keys.S)) {
                 save();
                 return true;
             }
 
-            if (keyData == (Keys.Control | Keys.R))
-            {
+            if (keyData == (Keys.Control | Keys.R)) {
                 replace();
                 return true;
             }
 
-            if (keyData == Keys.Delete)
-            {
+            if (keyData == Keys.Delete) {
                 delete_scene();
                 return true;
             }
@@ -74,17 +65,13 @@ namespace NetsphereScnTool.Forms
 
         #region Functions
 
-        private void f_remove_scene(int[] indexes)
-        {
+        private void f_remove_scene(int[] indexes) {
             if (container == null)
                 return;
 
-            for (int i = 0; i < indexes.Length; i++)
-            {
+            for (int i = 0; i < indexes.Length; i++) {
                 string name = null;
-                try
-                { name = container.ElementAt(indexes[i]).Name; }
-                catch { }
+                try { name = container.ElementAt(indexes[i]).Name; } catch { }
 
                 if (name == null)
                     continue;
@@ -95,16 +82,13 @@ namespace NetsphereScnTool.Forms
             }
         }
 
-        private bool f_extract_obj(SceneChunk scene)
-        {
+        private bool f_extract_obj(SceneChunk scene) {
             if (container == null)
                 return false;
 
-            if (scene != null && scene.ChunkType == ChunkType.ModelData)
-            {
+            if (scene != null && scene.ChunkType == ChunkType.ModelData) {
                 var folder = new FolderBrowserDialog();
-                if (folder.ShowDialog() == DialogResult.OK)
-                {
+                if (folder.ShowDialog() == DialogResult.OK) {
                     string file_name = scene.Name + ".obj";
 
                     var exporter = new Obj_Exporter();
@@ -117,20 +101,16 @@ namespace NetsphereScnTool.Forms
             return false;
         }
 
-        private bool f_import_obj()
-        {
+        private bool f_import_obj() {
             if (container == null)
                 return false;
 
-            var file = new OpenFileDialog
-            {
+            var file = new OpenFileDialog {
                 Filter = ".obj|*.obj"
             };
 
-            if (file.ShowDialog() == DialogResult.OK)
-            {
-                new Task(() =>
-                {
+            if (file.ShowDialog() == DialogResult.OK) {
+                new Task(() => {
                     var tcs = new TaskCompletionSource<bool>();
                     var importView = new ImportOBJView(tcs);
                     importView.ShowDialog();
@@ -148,21 +128,18 @@ namespace NetsphereScnTool.Forms
             return false;
         }
 
-        private bool f_replace_model(int index)
-        {
+        private bool f_replace_model(int index) {
             if (container == null)
                 return false;
 
             string name = container.ElementAt(index).Name;
             var scene = container.FirstOrDefault(x => x.Name == name);
 
-            var file = new OpenFileDialog
-            {
+            var file = new OpenFileDialog {
                 Filter = ".obj|*.obj"
             };
 
-            if (file.ShowDialog() == DialogResult.OK)
-            {
+            if (file.ShowDialog() == DialogResult.OK) {
                 var importer = new Obj_Importer();
 
                 importer.ReplaceModel(file.FileName, scene as ModelChunk);
@@ -173,8 +150,7 @@ namespace NetsphereScnTool.Forms
             return false;
         }
 
-        private bool f_edit_shader(int index)
-        {
+        private bool f_edit_shader(int index) {
             if (container == null)
                 return false;
 
@@ -183,8 +159,7 @@ namespace NetsphereScnTool.Forms
 
             var model = scene as ModelChunk;
 
-            new Task(() =>
-            {
+            new Task(() => {
                 var tcs = new TaskCompletionSource<bool>();
                 var shadereditView = new ShaderEditView(model.Shader, tcs);
                 shadereditView.ShowDialog();
@@ -199,8 +174,7 @@ namespace NetsphereScnTool.Forms
             return true;
         }
 
-        private bool f_change_texture(int index)
-        {
+        private bool f_change_texture(int index) {
             if (container == null)
                 return false;
 
@@ -214,8 +188,7 @@ namespace NetsphereScnTool.Forms
             foreach (var tds in model.TextureData.Textures)
                 txts.Add(tds.FileName);
 
-            new Task(() =>
-            {
+            new Task(() => {
                 var tcs = new TaskCompletionSource<bool>();
                 var texturechangeView = new TextureChangeView(txts, tcs);
                 texturechangeView.ShowDialog();
@@ -230,8 +203,7 @@ namespace NetsphereScnTool.Forms
             return true;
         }
 
-        private bool f_edit_animation(int index)
-        {
+        private bool f_edit_animation(int index) {
             if (container == null)
                 return false;
 
@@ -240,10 +212,8 @@ namespace NetsphereScnTool.Forms
 
             var bone = scene as BoneChunk;
 
-            if (bone != null)
-            {
-                new Task(() =>
-                {
+            if (bone != null) {
+                new Task(() => {
                     var tcs = new TaskCompletionSource<bool>();
                     var animationeditView = new AnimationEditView(bone.Animation, tcs);
                     animationeditView.ShowDialog();
@@ -254,13 +224,10 @@ namespace NetsphereScnTool.Forms
                     editor.EditAnimation(bone, animationeditView.BoneAnimation);
                     animationeditView.Dispose();
                 }).Start();
-            }
-            else
-            {
+            } else {
                 var model = scene as ModelChunk;
 
-                new Task(() =>
-                {
+                new Task(() => {
                     var tcs = new TaskCompletionSource<bool>();
                     var animationeditView = new AnimationEditView(model.Animation, tcs);
                     animationeditView.ShowDialog();
@@ -276,8 +243,7 @@ namespace NetsphereScnTool.Forms
             return true;
         }
 
-        private void f_draw_mesh(int index)
-        {
+        private void f_draw_mesh(int index) {
             if (container == null)
                 return;
 
@@ -286,16 +252,14 @@ namespace NetsphereScnTool.Forms
 
             var model = scene as ModelChunk;
 
-            new Task(() =>
-            {
+            new Task(() => {
                 var drawMesh = new DrawMesh(model.Mesh);
 
                 drawMesh.ShowDialog();
             }).Start();
         }
 
-        private bool f_extract_obj(IEnumerable<SceneChunk> scenes)
-        {
+        private bool f_extract_obj(IEnumerable<SceneChunk> scenes) {
             var exporter = new Obj_Exporter();
 
             if (container == null)
@@ -305,12 +269,9 @@ namespace NetsphereScnTool.Forms
                 return false;
 
             var folder = new FolderBrowserDialog();
-            if (folder.ShowDialog() == DialogResult.OK)
-            {
-                for (int i = 0; i < scenes.Count(); i++)
-                {
-                    if (scenes.ElementAt(i) != null && scenes.ElementAt(i).ChunkType == ChunkType.ModelData)
-                    {
+            if (folder.ShowDialog() == DialogResult.OK) {
+                for (int i = 0; i < scenes.Count(); i++) {
+                    if (scenes.ElementAt(i) != null && scenes.ElementAt(i).ChunkType == ChunkType.ModelData) {
                         string file_name = scenes.ElementAt(i).Name + ".obj";
                         exporter.Export(Path.Combine(folder.SelectedPath, file_name), scenes.ElementAt(i) as ModelChunk);
                     }
@@ -322,25 +283,20 @@ namespace NetsphereScnTool.Forms
             return false;
         }
 
-        private bool f_extract_scene(string name)
-        {
+        private bool f_extract_scene(string name) {
             if (container == null)
                 return false;
 
             var chunk = container.FirstOrDefault(x => x.Name == name);
-            if (chunk != null)
-            {
-                var save_dg = new SaveFileDialog
-                {
+            if (chunk != null) {
+                var save_dg = new SaveFileDialog {
                     FileName = $"{chunk.Name}",
                     Filter = ".scn_part|*.scn_part"
                 };
 
-                if (save_dg.ShowDialog() == DialogResult.OK)
-                {
+                if (save_dg.ShowDialog() == DialogResult.OK) {
                     using (var fs = new FileStream(save_dg.FileName, FileMode.Create, FileAccess.Write, FileShare.None))
-                    using (var bw = new BinaryWriter(fs))
-                    {
+                    using (var bw = new BinaryWriter(fs)) {
                         bw.WriteEnum(chunk.ChunkType);
                         bw.WriteCString(chunk.Name);
                         bw.WriteCString(chunk.SubName);
@@ -353,24 +309,19 @@ namespace NetsphereScnTool.Forms
             return false;
         }
 
-        private bool f_extract_scene(string[] strings)
-        {
+        private bool f_extract_scene(string[] strings) {
             if (container == null)
                 return false;
 
             var folder = new FolderBrowserDialog();
-            if (folder.ShowDialog() == DialogResult.OK)
-            {
-                for (int i = 0; i < strings.Length; i++)
-                {
+            if (folder.ShowDialog() == DialogResult.OK) {
+                for (int i = 0; i < strings.Length; i++) {
                     var chunk = container.FirstOrDefault(x => x.Name == strings[i]);
-                    if (chunk != null)
-                    {
+                    if (chunk != null) {
                         string full_path = $"{folder.SelectedPath}//{chunk.Name}.scn_part";
 
                         using (var fs = new FileStream(full_path, FileMode.Create, FileAccess.Write, FileShare.None))
-                        using (var bw = new BinaryWriter(fs))
-                        {
+                        using (var bw = new BinaryWriter(fs)) {
                             bw.WriteEnum(chunk.ChunkType);
                             bw.WriteCString(chunk.Name);
                             bw.WriteCString(chunk.SubName);
@@ -384,35 +335,28 @@ namespace NetsphereScnTool.Forms
             return false;
         }
 
-        private bool f_import_scene()
-        {
+        private bool f_import_scene() {
             if (container == null)
                 return false;
 
-            var file = new OpenFileDialog
-            {
+            var file = new OpenFileDialog {
                 Multiselect = true,
                 Filter = ".scn_part|*.scn_part"
             };
 
-            if (file.ShowDialog() == DialogResult.OK)
-            {
-                for (int i = 0; i < file.FileNames.Length; i++)
-                {
+            if (file.ShowDialog() == DialogResult.OK) {
+                for (int i = 0; i < file.FileNames.Length; i++) {
                     using (var fs = new FileStream(file.FileName, FileMode.Open, FileAccess.Read, FileShare.None))
-                    using (var br = new BinaryReader(fs))
-                    {
+                    using (var br = new BinaryReader(fs)) {
                         SceneChunk chunk = null;
 
                         var type = br.ReadEnum<ChunkType>();
                         string name = br.ReadCString();
                         string subname = br.ReadCString();
 
-                        switch (type)
-                        {
+                        switch (type) {
                             case ChunkType.Bone:
-                                chunk = new BoneChunk(container)
-                                {
+                                chunk = new BoneChunk(container) {
                                     Name = name,
                                     SubName = subname,
                                     Image = Properties.Resources.bone
@@ -423,8 +367,7 @@ namespace NetsphereScnTool.Forms
                                 break;
 
                             case ChunkType.BoneSystem:
-                                chunk = new BoneSystemChunk(container)
-                                {
+                                chunk = new BoneSystemChunk(container) {
                                     Name = name,
                                     SubName = subname,
                                     Image = Properties.Resources.bone_system
@@ -435,8 +378,7 @@ namespace NetsphereScnTool.Forms
                                 break;
 
                             case ChunkType.Box:
-                                chunk = new BoxChunk(container)
-                                {
+                                chunk = new BoxChunk(container) {
                                     Name = name,
                                     SubName = subname,
                                     Image = Properties.Resources.box
@@ -447,8 +389,7 @@ namespace NetsphereScnTool.Forms
                                 break;
 
                             case ChunkType.ModelData:
-                                chunk = new ModelChunk(container)
-                                {
+                                chunk = new ModelChunk(container) {
                                     Name = name,
                                     SubName = subname,
                                     Image = Properties.Resources.model
@@ -459,8 +400,7 @@ namespace NetsphereScnTool.Forms
                                 break;
 
                             case ChunkType.Shape:
-                                chunk = new ShapeChunk(container)
-                                {
+                                chunk = new ShapeChunk(container) {
                                     Name = name,
                                     SubName = subname,
                                     Image = Properties.Resources.shape
@@ -471,8 +411,7 @@ namespace NetsphereScnTool.Forms
                                 break;
 
                             case ChunkType.SkyDirect1:
-                                chunk = new SkyDirect1Chunk(container)
-                                {
+                                chunk = new SkyDirect1Chunk(container) {
                                     Name = name,
                                     SubName = subname,
                                     Image = Properties.Resources.sky
@@ -495,8 +434,7 @@ namespace NetsphereScnTool.Forms
         #endregion
 
         #region Internal
-        private void update_status()
-        {
+        private void update_status() {
             string sceneName = container.Header.Name;
             string sceneParent = container.Header.SubName;
             int objectCount = container.Count;
@@ -504,10 +442,8 @@ namespace NetsphereScnTool.Forms
             lbl_status.Text = $"New model opened: [Name: {sceneName}, Parent name: {sceneParent}, Count: {objectCount}]";
         }
 
-        private void update_view()
-        {
-            var bSource = new BindingSource
-            {
+        private void update_view() {
+            var bSource = new BindingSource {
                 DataSource = container
             };
             data_view.DataSource = bSource;
@@ -515,8 +451,7 @@ namespace NetsphereScnTool.Forms
             data_view.Update();
         }
 
-        private void check_undo_redo()
-        {
+        private void check_undo_redo() {
             if (undo_manager.CanUndo())
                 Extensions.EnableOrDisable(ComponentState.Enable, menu_undo);
             else
@@ -528,8 +463,7 @@ namespace NetsphereScnTool.Forms
                 Extensions.EnableOrDisable(ComponentState.Disable, menu_redo);
         }
 
-        private void undo()
-        {
+        private void undo() {
             undo_manager.Undo();
             container = undo_manager.GetContainer();
 
@@ -539,8 +473,7 @@ namespace NetsphereScnTool.Forms
             update_status();
         }
 
-        private void redo()
-        {
+        private void redo() {
             undo_manager.Redo();
             container = undo_manager.GetContainer();
 
@@ -550,49 +483,42 @@ namespace NetsphereScnTool.Forms
             update_status();
         }
 
-        private void delete_scene()
-        {
+        private void delete_scene() {
             if (data_view.Rows.Count <= 0)
                 return;
 
             var indexes = new List<int>();
 
-            for (int i = 0; i < data_view.SelectedRows.Count; i++)
-            {
+            for (int i = 0; i < data_view.SelectedRows.Count; i++) {
                 int currentIndex = data_view.SelectedRows[i].Index;
                 indexes.Add(currentIndex);
             }
 
             f_remove_scene(indexes.ToArray());
 
-            if (container != null)
-            {
+            if (container != null) {
                 undo_manager.Save(container);
                 update_view();
                 update_status();
             }
         }
 
-        private void save()
-        {
+        private void save() {
             if (container == null)
                 return;
 
-            var file = new SaveFileDialog
-            {
+            var file = new SaveFileDialog {
                 FileName = Path.GetFileName(container_path),
                 Filter = "scn|*.scn"
             };
 
-            if (file.ShowDialog() == DialogResult.OK)
-            {
+            if (file.ShowDialog() == DialogResult.OK) {
                 container.Write(file.FileName);
                 MessageBox.Show($"{Path.GetFileName(file.FileName)} successfully saved", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
-        private void replace()
-        {
+        private void replace() {
             if (container == null)
                 return;
 
@@ -600,26 +526,21 @@ namespace NetsphereScnTool.Forms
             MessageBox.Show($"{Path.GetFileName(container_path)} successfully replaced", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void extract_obj()
-        {
+        private void extract_obj() {
             if (container == null)
                 return;
 
             bool result = false;
 
-            if (data_view.SelectedRows.Count == 1)
-            {
+            if (data_view.SelectedRows.Count == 1) {
                 int index = data_view.SelectedRows[0].Index;
                 var source = container[index];
                 if (source != null)
                     result = f_extract_obj(source);
-            }
-            else
-            {
+            } else {
                 var scenes = new List<SceneChunk>();
 
-                for (int i = 0; i < data_view.SelectedRows.Count; i++)
-                {
+                for (int i = 0; i < data_view.SelectedRows.Count; i++) {
                     int currentIndex = data_view.SelectedRows[i].Index;
                     var scene = container[currentIndex];
 
@@ -637,25 +558,20 @@ namespace NetsphereScnTool.Forms
                 MessageBox.Show("Unable to export scene(s)", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        private void extract_scene()
-        {
+        private void extract_scene() {
             if (container == null)
                 return;
 
             bool result = false;
 
-            if (data_view.SelectedRows.Count == 1)
-            {
+            if (data_view.SelectedRows.Count == 1) {
                 int index = data_view.SelectedRows[0].Index;
                 var source = container[index];
                 if (source != null)
                     result = f_extract_scene(source.Name);
-            }
-            else
-            {
+            } else {
                 var keys = new List<string>();
-                for (int i = 0; i < data_view.SelectedRows.Count; i++)
-                {
+                for (int i = 0; i < data_view.SelectedRows.Count; i++) {
                     int index = data_view.SelectedRows[i].Index;
                     keys.Add(container[index].Name);
                 }
@@ -670,46 +586,39 @@ namespace NetsphereScnTool.Forms
                 MessageBox.Show("Unable to export scene(s)", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        private void import_scene()
-        {
+        private void import_scene() {
             if (container == null)
                 return;
 
             bool result = false;
             result = f_import_scene();
 
-            if (result)
-            {
+            if (result) {
                 update_view();
                 update_status();
 
                 undo_manager.Save(container);
-            }
-            else
+            } else
                 MessageBox.Show("Unable to import scene(s)", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        private void replace_model()
-        {
+        private void replace_model() {
             if (container == null)
                 return;
 
             bool result = false;
             result = f_replace_model(data_view.SelectedRows[0].Index);
 
-            if (result)
-            {
+            if (result) {
                 update_view();
                 update_status();
 
                 undo_manager.Save(container);
-            }
-            else
+            } else
                 MessageBox.Show("Unable to replace scene", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        private void edit_shader()
-        {
+        private void edit_shader() {
             if (container == null)
                 return;
 
@@ -722,8 +631,7 @@ namespace NetsphereScnTool.Forms
                 MessageBox.Show("Unable to change shader", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        private void change_texture()
-        {
+        private void change_texture() {
             if (container == null)
                 return;
 
@@ -736,8 +644,7 @@ namespace NetsphereScnTool.Forms
                 MessageBox.Show("Unable to change texture", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        private void edit_animation()
-        {
+        private void edit_animation() {
             if (container == null)
                 return;
 
@@ -750,8 +657,7 @@ namespace NetsphereScnTool.Forms
                 MessageBox.Show("Unable to change animation", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        private void draw_mesh()
-        {
+        private void draw_mesh() {
             if (container == null)
                 return;
 
@@ -760,22 +666,19 @@ namespace NetsphereScnTool.Forms
             undo_manager.Save(container);
         }
 
-        private void import_obj()
-        {
+        private void import_obj() {
             if (container == null)
                 return;
 
             bool result = false;
             result = f_import_obj();
 
-            if (result)
-            {
+            if (result) {
                 update_view();
                 update_status();
 
                 undo_manager.Save(container);
-            }
-            else
+            } else
                 MessageBox.Show("Unable to import scene", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         #endregion
@@ -881,29 +784,24 @@ namespace NetsphereScnTool.Forms
 
         #endregion
 
-        private void menu_new_map_Click(object sender, EventArgs e)
-        {
+        private void menu_new_map_Click(object sender, EventArgs e) {
             Extensions.EnableOrDisable(ComponentState.Disable, menu_new_map, menu_open_map);
             Extensions.EnableOrDisable(ComponentState.Enable, menu_close_map, menu_save, menu_edit);
             Extensions.EnableOrDisable(ComponentState.Enable, txt_find);
         }
 
-        private void menu_open_map_Click(object sender, EventArgs e)
-        {
+        private void menu_open_map_Click(object sender, EventArgs e) {
             if (container != null)
                 return;
 
-            var file = new OpenFileDialog
-            {
+            var file = new OpenFileDialog {
                 Filter = ".scn|*.scn"
             };
 
-            if (file.ShowDialog() == DialogResult.OK)
-            {
+            if (file.ShowDialog() == DialogResult.OK) {
                 container = SceneContainer.ReadFrom(file.FileName);
 
-                if (undo_manager == null)
-                {
+                if (undo_manager == null) {
                     undo_manager = new SceneUndoManager(50);
                     undo_manager.ObjectSaved += Undo_manager_ObjectSaved;
                 }
@@ -920,8 +818,7 @@ namespace NetsphereScnTool.Forms
             }
         }
 
-        private void menu_close_map_Click(object sender, EventArgs e)
-        {
+        private void menu_close_map_Click(object sender, EventArgs e) {
             if (container == null)
                 return;
 

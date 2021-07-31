@@ -2,40 +2,31 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace NetsphereScnTool.Scene.Chunks
-{
-    public class BoneChunk : SceneChunk
-    {
+namespace NetsphereScnTool.Scene.Chunks {
+    public class BoneChunk : SceneChunk {
         public override ChunkType ChunkType => ChunkType.Bone;
 
         public IList<BoneAnimation> Animation { get; set; }
 
         public BoneChunk(SceneContainer container)
-            : base(container)
-        {
+            : base(container) {
             Animation = new List<BoneAnimation>();
         }
 
-        public override void Serialize(Stream stream)
-        {
+        public override void Serialize(Stream stream) {
             base.Serialize(stream);
 
-            using (var w = stream.ToBinaryWriter(true))
-            {
+            using (var w = stream.ToBinaryWriter(true)) {
                 w.Write(Version);
 
                 w.Write(Animation.Count);
-                foreach (var anim in Animation)
-                {
-                    if (Version >= 0.2000000029802322f)
-                    {
+                foreach (var anim in Animation) {
+                    if (Version >= 0.2000000029802322f) {
                         w.WriteCString(anim.Name);
                         w.WriteCString(anim.Copy);
                         if (string.IsNullOrWhiteSpace(anim.Copy))
                             w.Serialize(anim.TransformKeyData);
-                    }
-                    else
-                    {
+                    } else {
                         w.WriteCString(anim.Name);
                         w.Serialize(anim.TransformKeyData);
                     }
@@ -43,19 +34,15 @@ namespace NetsphereScnTool.Scene.Chunks
             }
         }
 
-        public override void Deserialize(Stream stream)
-        {
+        public override void Deserialize(Stream stream) {
             base.Deserialize(stream);
 
-            using (var r = stream.ToBinaryReader(true))
-            {
+            using (var r = stream.ToBinaryReader(true)) {
                 Version = r.ReadSingle();
 
                 uint count = r.ReadUInt32();
-                for (int i = 0; i < count; i++)
-                {
-                    if (Version >= 0.2000000029802322f)
-                    {
+                for (int i = 0; i < count; i++) {
+                    if (Version >= 0.2000000029802322f) {
                         string name = r.ReadCString();
                         string subName = r.ReadCString();
                         TransformKeyData transformKeyData = null;
@@ -64,9 +51,7 @@ namespace NetsphereScnTool.Scene.Chunks
                             transformKeyData = r.Deserialize<TransformKeyData>();
 
                         Animation.Add(new BoneAnimation { Name = name, Copy = subName, TransformKeyData = transformKeyData });
-                    }
-                    else
-                    {
+                    } else {
                         string name = r.ReadCString();
                         Animation.Add(new BoneAnimation { Name = name, Copy = default(string), TransformKeyData = r.Deserialize<TransformKeyData>() });
                     }

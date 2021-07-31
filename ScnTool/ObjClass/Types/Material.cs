@@ -1,9 +1,7 @@
 using System.Text;
 
-namespace ObjParser.Types
-{
-    public class Material : IType
-    {
+namespace ObjParser.Types {
+    public class Material : IType {
         public string Name { get; set; }
         public Color AmbientReflectivity { get; set; }
         public Color DiffuseReflectivity { get; set; }
@@ -15,8 +13,7 @@ namespace ObjParser.Types
         public float Dissolve { get; set; }
         public float IlluminationModel { get; set; }
 
-        public Material()
-        {
+        public Material() {
             Name = "DefaultMaterial";
             AmbientReflectivity = new Color();
             DiffuseReflectivity = new Color();
@@ -29,12 +26,10 @@ namespace ObjParser.Types
             IlluminationModel = 0;
         }
 
-        public void LoadFromStringArray(string[] data)
-        {
+        public void LoadFromStringArray(string[] data) {
         }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             var b = new StringBuilder();
             b.AppendLine("newmtl " + Name);
 

@@ -4,16 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace NetsphereScnTool.Forms
-{
-    public partial class TextureChangeView : Form
-    {
+namespace NetsphereScnTool.Forms {
+    public partial class TextureChangeView : Form {
         public List<string> Textures;
 
         private readonly TaskCompletionSource<bool> _tcs;
 
-        public TextureChangeView(List<string> txts, TaskCompletionSource<bool> tcs)
-        {
+        public TextureChangeView(List<string> txts, TaskCompletionSource<bool> tcs) {
             InitializeComponent();
 
             Textures = txts;
@@ -24,8 +21,7 @@ namespace NetsphereScnTool.Forms
             _tcs = tcs;
         }
 
-        private void ApplyTexture_Click(object sender, EventArgs e)
-        {
+        private void ApplyTexture_Click(object sender, EventArgs e) {
             string[] split = txts.Text.Split(Environment.NewLine.ToCharArray());
             var slist = split.ToList();
             slist.Remove(string.Empty);

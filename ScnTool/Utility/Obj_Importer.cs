@@ -5,12 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 
-namespace NetsphereScnTool.Utility
-{
-    public class Obj_Importer
-    {
-        public void ReplaceModel(string fileName, ModelChunk model)
-        {
+namespace NetsphereScnTool.Utility {
+    public class Obj_Importer {
+        public void ReplaceModel(string fileName, ModelChunk model) {
             var VertexList = new List<Vector3>();
             var NormalList = new List<Vector3>();
             var UVList = new List<Vector2>();
@@ -40,14 +37,12 @@ namespace NetsphereScnTool.Utility
                                        float.Parse(obj.TextureList[index].Y.ToString()) / 100));
 
             var vector_temp = new List<Vector3>();
-            for (int index = 0; index < VertexList.Count; index++)
-            {
+            for (int index = 0; index < VertexList.Count; index++) {
                 var temp = Vector3.Transform(VertexList[index], _matrix);
                 vector_temp.Add(temp);
             }
 
-            for (int index = 0; index < obj.FaceList.Count; index++)
-            {
+            for (int index = 0; index < obj.FaceList.Count; index++) {
                 string face = obj.FaceList[index].ToString();
                 string[] face_array = face.Split(' ');
 
@@ -64,8 +59,7 @@ namespace NetsphereScnTool.Utility
                                           Convert.ToInt32(_Z[0]) - 1));
             }
 
-            var texture = new TextureEntry
-            {
+            var texture = new TextureEntry {
                 FaceCount = obj.FaceList.Count,
                 FaceCounter = 0,
 
@@ -84,8 +78,7 @@ namespace NetsphereScnTool.Utility
             model.Mesh.Faces = FacesList;
         }
 
-        public void Import(string fileName, string textureName, string sceneName, string sceneSubname, SceneContainer container)
-        {
+        public void Import(string fileName, string textureName, string sceneName, string sceneSubname, SceneContainer container) {
             var VertexList = new List<Vector3>();
             var NormalList = new List<Vector3>();
             var UVList = new List<Vector2>();
@@ -116,8 +109,7 @@ namespace NetsphereScnTool.Utility
             for (int index = 0; index < VertexList.Count; index++)
                 model.Mesh.Vertices.Add(VertexList[index]);
 
-            for (int index = 0; index < obj.FaceList.Count; index++)
-            {
+            for (int index = 0; index < obj.FaceList.Count; index++) {
                 string face = obj.FaceList[index].ToString();
                 string[] face_array = face.Split(' ');
 
@@ -134,8 +126,7 @@ namespace NetsphereScnTool.Utility
                                           Convert.ToInt32(_Z[0]) - 1));
             }
 
-            var texture = new TextureEntry
-            {
+            var texture = new TextureEntry {
                 FaceCount = obj.FaceList.Count,
                 FaceCounter = 0,
 

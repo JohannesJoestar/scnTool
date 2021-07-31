@@ -5,36 +5,29 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 
-namespace NetsphereScnTool.Scene.Chunks
-{
-    public class ModelAnimation
-    {
+namespace NetsphereScnTool.Scene.Chunks {
+    public class ModelAnimation {
         public string Name;
         public TransformKeyData2 TransformKeyData2;
     }
 
-    public class TransformKeyData2 : TransformKeyData
-    {
+    public class TransformKeyData2 : TransformKeyData {
         public IList<MorphKey> MorphKeys { get; set; }
 
-        public TransformKeyData2()
-        {
+        public TransformKeyData2() {
             MorphKeys = new List<MorphKey>();
         }
 
-        public override void Serialize(Stream stream)
-        {
+        public override void Serialize(Stream stream) {
             base.Serialize(stream);
 
-            using (var w = stream.ToBinaryWriter(true))
-            {
+            using (var w = stream.ToBinaryWriter(true)) {
                 w.Write(MorphKeys.Count);
                 w.Serialize(MorphKeys);
             }
         }
 
-        public override void Deserialize(Stream stream)
-        {
+        public override void Deserialize(Stream stream) {
             base.Deserialize(stream);
 
             using (var r = stream.ToBinaryReader(true))
@@ -42,30 +35,25 @@ namespace NetsphereScnTool.Scene.Chunks
         }
     }
 
-    public class BoneAnimation
-    {
+    public class BoneAnimation {
         public string Name;
         public string Copy;
         public TransformKeyData TransformKeyData;
     }
 
-    public class TransformKeyData : IManualSerializer
-    {
+    public class TransformKeyData : IManualSerializer {
         public TimeSpan Duration { get; set; }
         public TransformKey TransformKey { get; set; }
         public IList<FloatKey> FloatKeys { get; set; }
 
-        public TransformKeyData()
-        {
+        public TransformKeyData() {
             Duration = TimeSpan.Zero;
             FloatKeys = new List<FloatKey>();
         }
 
-        public virtual void Serialize(Stream stream)
-        {
-            using (var w = stream.ToBinaryWriter(true))
-            {
-                w.Write((uint)Duration.TotalMilliseconds);
+        public virtual void Serialize(Stream stream) {
+            using (var w = stream.ToBinaryWriter(true)) {
+                w.Write((uint) Duration.TotalMilliseconds);
 
                 w.Write(TransformKey != null);
                 if (TransformKey != null)
@@ -76,10 +64,8 @@ namespace NetsphereScnTool.Scene.Chunks
             }
         }
 
-        public virtual void Deserialize(Stream stream)
-        {
-            using (var r = stream.ToBinaryReader(true))
-            {
+        public virtual void Deserialize(Stream stream) {
+            using (var r = stream.ToBinaryReader(true)) {
                 Duration = TimeSpan.FromMilliseconds(r.ReadUInt32());
 
                 bool flag = r.ReadBoolean();
@@ -91,8 +77,7 @@ namespace NetsphereScnTool.Scene.Chunks
         }
     }
 
-    public class TransformKey : IManualSerializer
-    {
+    public class TransformKey : IManualSerializer {
         public Vector3 Translation { get; set; }
         public Quaternion Rotation { get; set; }
         public Vector3 Scale { get; set; }
@@ -101,8 +86,7 @@ namespace NetsphereScnTool.Scene.Chunks
         public IList<RKey> RKey { get; set; }
         public IList<SKey> SKey { get; set; }
 
-        public TransformKey()
-        {
+        public TransformKey() {
             Translation = Vector3.Zero;
             Rotation = Quaternion.Identity;
             Scale = Vector3.Zero;
@@ -112,10 +96,8 @@ namespace NetsphereScnTool.Scene.Chunks
             SKey = new List<SKey>();
         }
 
-        public void Serialize(Stream stream)
-        {
-            using (var w = stream.ToBinaryWriter(true))
-            {
+        public void Serialize(Stream stream) {
+            using (var w = stream.ToBinaryWriter(true)) {
                 w.Write(Translation.X);
                 w.Write(Translation.Y);
                 w.Write(Translation.Z);
@@ -130,9 +112,8 @@ namespace NetsphereScnTool.Scene.Chunks
                 w.Write(Scale.Z);
 
                 w.Write(TKey.Count);
-                foreach (var tkey in TKey)
-                {
-                    w.Write((uint)tkey.Duration.TotalMilliseconds);
+                foreach (var tkey in TKey) {
+                    w.Write((uint) tkey.Duration.TotalMilliseconds);
 
                     w.Write(tkey.Translation.X);
                     w.Write(tkey.Translation.Y);
@@ -140,9 +121,8 @@ namespace NetsphereScnTool.Scene.Chunks
                 }
 
                 w.Write(RKey.Count);
-                foreach (var rkey in RKey)
-                {
-                    w.Write((uint)rkey.Duration.TotalMilliseconds);
+                foreach (var rkey in RKey) {
+                    w.Write((uint) rkey.Duration.TotalMilliseconds);
 
                     w.Write(rkey.Rotation.X);
                     w.Write(rkey.Rotation.Y);
@@ -151,9 +131,8 @@ namespace NetsphereScnTool.Scene.Chunks
                 }
 
                 w.Write(SKey.Count);
-                foreach (var skey in SKey)
-                {
-                    w.Write((uint)skey.Duration.TotalMilliseconds);
+                foreach (var skey in SKey) {
+                    w.Write((uint) skey.Duration.TotalMilliseconds);
 
                     w.Write(skey.Scale.X);
                     w.Write(skey.Scale.Y);
@@ -162,10 +141,8 @@ namespace NetsphereScnTool.Scene.Chunks
             }
         }
 
-        public void Deserialize(Stream stream)
-        {
-            using (var r = stream.ToBinaryReader(true))
-            {
+        public void Deserialize(Stream stream) {
+            using (var r = stream.ToBinaryReader(true)) {
                 Translation = new Vector3(r.ReadSingle(), r.ReadSingle(), r.ReadSingle());
                 Rotation = new Quaternion(r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle());
                 Scale = new Vector3(r.ReadSingle(), r.ReadSingle(), r.ReadSingle());
@@ -185,75 +162,61 @@ namespace NetsphereScnTool.Scene.Chunks
         }
     }
 
-    public struct TKey
-    {
+    public struct TKey {
         public TimeSpan Duration;
         public Vector3 Translation;
     }
 
-    public struct RKey
-    {
+    public struct RKey {
         public TimeSpan Duration;
         public Quaternion Rotation;
     }
 
-    public struct SKey
-    {
+    public struct SKey {
         public TimeSpan Duration;
         public Vector3 Scale;
     }
 
-    public struct VKey
-    {
+    public struct VKey {
         public TimeSpan Duration;
         public float Alpha;
     }
 
-    public class FloatKey : IManualSerializer
-    {
+    public class FloatKey : IManualSerializer {
         public TimeSpan Duration { get; set; }
         public float Alpha { get; set; }
 
-        public void Serialize(Stream stream)
-        {
-            using (var w = stream.ToBinaryWriter(true))
-            {
-                w.Write((uint)Duration.TotalMilliseconds);
+        public void Serialize(Stream stream) {
+            using (var w = stream.ToBinaryWriter(true)) {
+                w.Write((uint) Duration.TotalMilliseconds);
                 w.Write(Alpha);
             }
         }
 
-        public void Deserialize(Stream stream)
-        {
-            using (var r = stream.ToBinaryReader(true))
-            {
+        public void Deserialize(Stream stream) {
+            using (var r = stream.ToBinaryReader(true)) {
                 Duration = TimeSpan.FromMilliseconds(r.ReadUInt32());
                 Alpha = r.ReadSingle();
             }
         }
     }
 
-    public class MorphKey : IManualSerializer
-    {
+    public class MorphKey : IManualSerializer {
         public TimeSpan Duration { get; set; }
         public IList<Quaternion> Rotations { get; set; }
         public IList<Vector3> Positions { get; set; }
 
-        public MorphKey()
-        {
+        public MorphKey() {
             Rotations = new List<Quaternion>();
             Positions = new List<Vector3>();
         }
 
-        public void Serialize(Stream stream)
-        {
-            using (var w = stream.ToBinaryWriter(true))
-            {
-                w.Write((uint)Duration.TotalMilliseconds);
+        public void Serialize(Stream stream) {
+            using (var w = stream.ToBinaryWriter(true)) {
+                w.Write((uint) Duration.TotalMilliseconds);
 
                 w.Write(Rotations.Count);
-                foreach (var rotation in Rotations)
-                {
+                foreach (var rotation in Rotations) {
                     w.Write(rotation.X);
                     w.Write(rotation.Y);
                     w.Write(rotation.Z);
@@ -261,8 +224,7 @@ namespace NetsphereScnTool.Scene.Chunks
                 }
 
                 w.Write(Positions.Count);
-                foreach (var position in Positions)
-                {
+                foreach (var position in Positions) {
                     w.Write(position.X);
                     w.Write(position.Y);
                     w.Write(position.Z);
@@ -270,10 +232,8 @@ namespace NetsphereScnTool.Scene.Chunks
             }
         }
 
-        public void Deserialize(Stream stream)
-        {
-            using (var r = stream.ToBinaryReader(true))
-            {
+        public void Deserialize(Stream stream) {
+            using (var r = stream.ToBinaryReader(true)) {
                 Duration = TimeSpan.FromMilliseconds(r.ReadUInt32());
 
                 int count = r.ReadInt32();

@@ -1,20 +1,16 @@
-namespace ObjParser.Types
-{
-    public class Color : IType
-    {
+namespace ObjParser.Types {
+    public class Color : IType {
         public float r { get; set; }
         public float g { get; set; }
         public float b { get; set; }
 
-        public Color()
-        {
+        public Color() {
             r = 1f;
             g = 1f;
             b = 1f;
         }
 
-        public void LoadFromStringArray(string[] data)
-        {
+        public void LoadFromStringArray(string[] data) {
             if (data.Length != 4)
                 return;
             r = float.Parse(data[1]);

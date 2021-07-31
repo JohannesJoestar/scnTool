@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NetsphereScnTool.UndoRedo
-{
-    public class UndoSystem<T> where T : new()
-    {
+namespace NetsphereScnTool.UndoRedo {
+    public class UndoSystem<T> where T : new() {
         private readonly uint _maxObjects = 0;
         private bool _firstStart = true;
 
@@ -14,8 +12,7 @@ namespace NetsphereScnTool.UndoRedo
         private Stack<T> undo_object { get; set; }
         private Stack<T> redo_object { get; set; }
 
-        public T Current_Object
-        {
+        public T Current_Object {
             get => current_object;
             internal set => current_object = value;
         }
@@ -32,22 +29,19 @@ namespace NetsphereScnTool.UndoRedo
         protected virtual void OnObjectSaved(EventArgs e) => ObjectSaved.Invoke(this, e);
         #endregion
 
-        public UndoSystem()
-        {
+        public UndoSystem() {
             _maxObjects = 50;
 
-            undo_object = new Stack<T>((int)_maxObjects);
-            redo_object = new Stack<T>((int)_maxObjects);
+            undo_object = new Stack<T>((int) _maxObjects);
+            redo_object = new Stack<T>((int) _maxObjects);
         }
 
         public UndoSystem(uint maxObjects)
-          : this()
-        {
+          : this() {
             _maxObjects = maxObjects;
         }
 
-        public void Undo()
-        {
+        public void Undo() {
             if (undo_object.Count() <= 0)
                 return;
 
@@ -60,10 +54,8 @@ namespace NetsphereScnTool.UndoRedo
             current_object = @object;
         }
 
-        public void Redo()
-        {
-            if (redo_object.Count() > 0)
-            {
+        public void Redo() {
+            if (redo_object.Count() > 0) {
                 var @object = redo_object.Pop();
 
                 if (@object == null)
@@ -74,8 +66,7 @@ namespace NetsphereScnTool.UndoRedo
             }
         }
 
-        public void ClearSystem()
-        {
+        public void ClearSystem() {
             undo_object.Clear();
             redo_object.Clear();
 
@@ -83,17 +74,14 @@ namespace NetsphereScnTool.UndoRedo
             _firstStart = true;
         }
 
-        public virtual void Save(T @object)
-        {
-            if (undo_object.Count() >= _maxObjects)
-            {
+        public virtual void Save(T @object) {
+            if (undo_object.Count() >= _maxObjects) {
                 var tempStack = undo_object.Reverse();
                 tempStack.Pop();
                 undo_object = tempStack.Reverse();
             }
 
-            if (_firstStart)
-            {
+            if (_firstStart) {
                 current_object = @object;
                 _firstStart = false;
             }

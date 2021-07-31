@@ -1,7 +1,5 @@
-﻿namespace ObjParser.Types
-{
-    internal interface IType
-    {
+﻿namespace ObjParser.Types {
+    internal interface IType {
         // v = Vertex
         // vt = TextureVertex
         // vn = Naturals

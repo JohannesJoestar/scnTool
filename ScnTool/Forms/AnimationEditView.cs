@@ -7,18 +7,15 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
-namespace NetsphereScnTool.Forms
-{
-    public partial class AnimationEditView : Form
-    {
+namespace NetsphereScnTool.Forms {
+    public partial class AnimationEditView : Form {
         public IList<BoneAnimation> BoneAnimation;
         public IList<ModelAnimation> ModelAnimation;
         public TaskCompletionSource<bool> _tcs;
 
         private readonly AnimationType _type;
 
-        public AnimationEditView(IList<BoneAnimation> animation, TaskCompletionSource<bool> tcs)
-        {
+        public AnimationEditView(IList<BoneAnimation> animation, TaskCompletionSource<bool> tcs) {
             InitializeComponent();
 
             _tcs = tcs;
@@ -27,8 +24,7 @@ namespace NetsphereScnTool.Forms
             var xml = new XDocument();
             var root = new XElement("animations");
 
-            for (int i = 0; i < animation.Count; i++)
-            {
+            for (int i = 0; i < animation.Count; i++) {
                 var e = new XElement("animation");
 
                 var transformkeydata = animation[i].TransformKeyData;
@@ -59,8 +55,7 @@ namespace NetsphereScnTool.Forms
                 e2.Add(new XElement[] { e3, e4, e5 });
 
                 var e6 = new XElement("transform_key");
-                for (int j = 0; j < transformkeydata.TransformKey.TKey.Count; j++)
-                {
+                for (int j = 0; j < transformkeydata.TransformKey.TKey.Count; j++) {
                     var e7 = new XElement("translation_key");
                     e7.SetAttributeValue("tick_time", transformkeydata.TransformKey.TKey[j].Duration.TotalMilliseconds);
                     e7.SetAttributeValue("X", transformkeydata.TransformKey.TKey[j].Translation.X);
@@ -70,8 +65,7 @@ namespace NetsphereScnTool.Forms
                     e6.Add(e7);
                 }
 
-                for (int k = 0; k < transformkeydata.TransformKey.RKey.Count; k++)
-                {
+                for (int k = 0; k < transformkeydata.TransformKey.RKey.Count; k++) {
                     var e8 = new XElement("rotation_key");
                     e8.SetAttributeValue("tick_time", transformkeydata.TransformKey.RKey[k].Duration.TotalMilliseconds);
                     var eulerrot = transformkeydata.TransformKey.RKey[k].Rotation.ToEuler();
@@ -82,8 +76,7 @@ namespace NetsphereScnTool.Forms
                     e6.Add(e8);
                 }
 
-                for (int l = 0; l < transformkeydata.TransformKey.SKey.Count; l++)
-                {
+                for (int l = 0; l < transformkeydata.TransformKey.SKey.Count; l++) {
                     var e9 = new XElement("scale_key");
                     e9.SetAttributeValue("tick_time", transformkeydata.TransformKey.SKey[l].Duration.TotalMilliseconds);
                     e9.SetAttributeValue("X", transformkeydata.TransformKey.SKey[l].Scale.X);
@@ -94,8 +87,7 @@ namespace NetsphereScnTool.Forms
                 }
 
                 var e10 = new XElement("float_keys");
-                for (int m = 0; m < transformkeydata.FloatKeys.Count; m++)
-                {
+                for (int m = 0; m < transformkeydata.FloatKeys.Count; m++) {
                     var e11 = new XElement("float_key");
                     e11.SetAttributeValue("tick_time", transformkeydata.FloatKeys[m].Duration.TotalMilliseconds);
                     e11.SetAttributeValue("alpha", transformkeydata.FloatKeys[m].Alpha);
@@ -114,8 +106,7 @@ namespace NetsphereScnTool.Forms
             txt.Text = xml.ToString();
         }
 
-        public AnimationEditView(IList<ModelAnimation> animation, TaskCompletionSource<bool> tcs)
-        {
+        public AnimationEditView(IList<ModelAnimation> animation, TaskCompletionSource<bool> tcs) {
             InitializeComponent();
 
             _tcs = tcs;
@@ -124,8 +115,7 @@ namespace NetsphereScnTool.Forms
             var xml = new XDocument();
             var root = new XElement("animations");
 
-            for (int i = 0; i < animation.Count; i++)
-            {
+            for (int i = 0; i < animation.Count; i++) {
                 var e = new XElement("animation");
 
                 var transformkeydata2 = animation[i].TransformKeyData2;
@@ -155,8 +145,7 @@ namespace NetsphereScnTool.Forms
                 e2.Add(new XElement[] { e3, e4, e5 });
 
                 var e6 = new XElement("transform_key");
-                for (int j = 0; j < transformkeydata2.TransformKey.TKey.Count; j++)
-                {
+                for (int j = 0; j < transformkeydata2.TransformKey.TKey.Count; j++) {
                     var e7 = new XElement("translation_key");
                     e7.SetAttributeValue("tick_time", transformkeydata2.TransformKey.TKey[j].Duration.TotalMilliseconds);
                     e7.SetAttributeValue("X", transformkeydata2.TransformKey.TKey[j].Translation.X);
@@ -166,8 +155,7 @@ namespace NetsphereScnTool.Forms
                     e6.Add(e7);
                 }
 
-                for (int k = 0; k < transformkeydata2.TransformKey.RKey.Count; k++)
-                {
+                for (int k = 0; k < transformkeydata2.TransformKey.RKey.Count; k++) {
                     var e8 = new XElement("rotation_key");
                     e8.SetAttributeValue("tick_time", transformkeydata2.TransformKey.RKey[k].Duration.TotalMilliseconds);
                     var eulerrot = transformkeydata2.TransformKey.RKey[k].Rotation.ToEuler();
@@ -178,8 +166,7 @@ namespace NetsphereScnTool.Forms
                     e6.Add(e8);
                 }
 
-                for (int l = 0; l < transformkeydata2.TransformKey.SKey.Count; l++)
-                {
+                for (int l = 0; l < transformkeydata2.TransformKey.SKey.Count; l++) {
                     var e9 = new XElement("scale_key");
                     e9.SetAttributeValue("tick_time", transformkeydata2.TransformKey.SKey[l].Duration.TotalMilliseconds);
                     e9.SetAttributeValue("X", transformkeydata2.TransformKey.SKey[l].Scale.X);
@@ -190,8 +177,7 @@ namespace NetsphereScnTool.Forms
                 }
 
                 var e10 = new XElement("float_keys");
-                for (int m = 0; m < transformkeydata2.FloatKeys.Count; m++)
-                {
+                for (int m = 0; m < transformkeydata2.FloatKeys.Count; m++) {
                     var e11 = new XElement("float_key");
                     e11.SetAttributeValue("tick_time", transformkeydata2.FloatKeys[m].Duration.TotalMilliseconds);
                     e11.SetAttributeValue("alpha", transformkeydata2.FloatKeys[m].Alpha);
@@ -200,13 +186,11 @@ namespace NetsphereScnTool.Forms
                 }
 
                 var e12 = new XElement("morph_keys");
-                for (int n = 0; n < transformkeydata2.MorphKeys.Count; n++)
-                {
+                for (int n = 0; n < transformkeydata2.MorphKeys.Count; n++) {
                     var e13 = new XElement("morph_key");
                     e13.SetAttributeValue("tick_time", transformkeydata2.MorphKeys[n].Duration.TotalMilliseconds);
 
-                    for (int o = 0; o < transformkeydata2.MorphKeys[n].Positions.Count; o++)
-                    {
+                    for (int o = 0; o < transformkeydata2.MorphKeys[n].Positions.Count; o++) {
                         var e14 = new XElement("morph_position");
                         e14.SetAttributeValue("X", transformkeydata2.MorphKeys[n].Positions[o].X);
                         e14.SetAttributeValue("Y", transformkeydata2.MorphKeys[n].Positions[o].Y);
@@ -215,8 +199,7 @@ namespace NetsphereScnTool.Forms
                         e13.Add(e14);
                     }
 
-                    for (int p = 0; p < transformkeydata2.MorphKeys[n].Rotations.Count; p++)
-                    {
+                    for (int p = 0; p < transformkeydata2.MorphKeys[n].Rotations.Count; p++) {
                         var e15 = new XElement("morph_rotation");
                         var eulerrotmorph = transformkeydata2.MorphKeys[n].Rotations[p].ToEuler();
                         e15.SetAttributeValue("X", eulerrotmorph.X);
@@ -241,8 +224,7 @@ namespace NetsphereScnTool.Forms
             txt.Text = xml.ToString();
         }
 
-        private void ApplyAnimation_Click(object sender, EventArgs e)
-        {
+        private void ApplyAnimation_Click(object sender, EventArgs e) {
             if (_type == AnimationType.Bone)
                 ApplyAnimation_Click_Bone();
             else
@@ -252,16 +234,14 @@ namespace NetsphereScnTool.Forms
             Hide();
         }
 
-        private void ApplyAnimation_Click_Bone()
-        {
+        private void ApplyAnimation_Click_Bone() {
             var xml = XDocument.Parse(txt.Text);
 
             var es = xml.Root.Elements().ToList();
 
             BoneAnimation = new List<BoneAnimation>();
 
-            for (int i = 0; i < es.Count(); i++)
-            {
+            for (int i = 0; i < es.Count(); i++) {
                 var anim = new BoneAnimation();
 
                 var ats = es[i].Attributes().ToList();
@@ -272,10 +252,8 @@ namespace NetsphereScnTool.Forms
                 transformkeydata.Duration = TimeSpan.FromMilliseconds(double.Parse(ats[3].Value));
 
                 var inits = es[i].Elements().ToList()[0].Elements().ToList();
-                if (inits.Count != 0)
-                {
-                    transformkeydata.TransformKey = new TransformKey
-                    {
+                if (inits.Count != 0) {
+                    transformkeydata.TransformKey = new TransformKey {
                         Translation = new Vector3(
                         float.Parse(inits[0].Attribute("X").Value),
                         float.Parse(inits[0].Attribute("Y").Value),
@@ -298,10 +276,8 @@ namespace NetsphereScnTool.Forms
                     var transformkey = es[i].Elements().ToList()[1].Elements();
 
                     var translationkey = transformkey.Where(_ => _.Name == "translation_key").ToList();
-                    for (int j = 0; j < translationkey.Count(); j++)
-                    {
-                        transformkeydata.TransformKey.TKey.Add(new TKey
-                        {
+                    for (int j = 0; j < translationkey.Count(); j++) {
+                        transformkeydata.TransformKey.TKey.Add(new TKey {
                             Duration = TimeSpan.FromMilliseconds(double.Parse(translationkey[j].Attribute("tick_time").Value)),
                             Translation = new Vector3(
                                 float.Parse(translationkey[j].Attribute("X").Value),
@@ -312,10 +288,8 @@ namespace NetsphereScnTool.Forms
                     }
 
                     var rotationkey = transformkey.Where(_ => _.Name == "rotation_key").ToList();
-                    for (int k = 0; k < rotationkey.Count(); k++)
-                    {
-                        transformkeydata.TransformKey.RKey.Add(new RKey
-                        {
+                    for (int k = 0; k < rotationkey.Count(); k++) {
+                        transformkeydata.TransformKey.RKey.Add(new RKey {
                             Duration = TimeSpan.FromMilliseconds(double.Parse(rotationkey[k].Attribute("tick_time").Value)),
                             Rotation = new Vector3(
                                 float.Parse(rotationkey[k].Attribute("X").Value),
@@ -326,10 +300,8 @@ namespace NetsphereScnTool.Forms
                     }
 
                     var scalekey = transformkey.Where(_ => _.Name == "scale_key").ToList();
-                    for (int l = 0; l < scalekey.Count(); l++)
-                    {
-                        transformkeydata.TransformKey.SKey.Add(new SKey
-                        {
+                    for (int l = 0; l < scalekey.Count(); l++) {
+                        transformkeydata.TransformKey.SKey.Add(new SKey {
                             Duration = TimeSpan.FromMilliseconds(double.Parse(scalekey[l].Attribute("tick_time").Value)),
                             Scale = new Vector3(
                                 float.Parse(scalekey[l].Attribute("X").Value),
@@ -341,10 +313,8 @@ namespace NetsphereScnTool.Forms
                 }
 
                 var floatkey = es[i].Elements().ToList()[2].Elements().ToList();
-                for (int m = 0; m < floatkey.Count(); m++)
-                {
-                    transformkeydata.FloatKeys.Add(new FloatKey
-                    {
+                for (int m = 0; m < floatkey.Count(); m++) {
+                    transformkeydata.FloatKeys.Add(new FloatKey {
                         Duration = TimeSpan.FromMilliseconds(double.Parse(floatkey[m].Attribute("tick_time").Value)),
                         Alpha = float.Parse(floatkey[m].Attribute("alpha").Value)
                     });
@@ -355,21 +325,18 @@ namespace NetsphereScnTool.Forms
             }
         }
 
-        private void ApplyAnimation_Click_Model()
-        {
+        private void ApplyAnimation_Click_Model() {
             var xml = XDocument.Parse(txt.Text);
 
             var es = xml.Root.Elements().ToList();
 
             ModelAnimation = new List<ModelAnimation>();
 
-            for (int i = 0; i < es.Count(); i++)
-            {
+            for (int i = 0; i < es.Count(); i++) {
                 var anim = new ModelAnimation();
 
                 var ats = es[i].Attributes().ToList();
-                var transformkeydata2 = new TransformKeyData2
-                {
+                var transformkeydata2 = new TransformKeyData2 {
                     TransformKey = new TransformKey()
                 };
 
@@ -377,8 +344,7 @@ namespace NetsphereScnTool.Forms
                 transformkeydata2.Duration = TimeSpan.FromMilliseconds(double.Parse(ats[2].Value));
 
                 var inits = es[i].Elements().ToList()[0].Elements().ToList();
-                if (inits.Count != 0)
-                {
+                if (inits.Count != 0) {
                     transformkeydata2.TransformKey.Translation = new Vector3(
                     float.Parse(inits[0].Attribute("X").Value),
                     float.Parse(inits[0].Attribute("Y").Value),
@@ -400,10 +366,8 @@ namespace NetsphereScnTool.Forms
                     var transformkey = es[i].Elements().ToList()[1].Elements();
 
                     var translationkey = transformkey.Where(_ => _.Name == "translation_key").ToList();
-                    for (int j = 0; j < translationkey.Count(); j++)
-                    {
-                        transformkeydata2.TransformKey.TKey.Add(new TKey
-                        {
+                    for (int j = 0; j < translationkey.Count(); j++) {
+                        transformkeydata2.TransformKey.TKey.Add(new TKey {
                             Duration = TimeSpan.FromMilliseconds(double.Parse(translationkey[j].Attribute("tick_time").Value)),
                             Translation = new Vector3(
                                 float.Parse(translationkey[j].Attribute("X").Value),
@@ -414,10 +378,8 @@ namespace NetsphereScnTool.Forms
                     }
 
                     var rotationkey = transformkey.Where(_ => _.Name == "rotation_key").ToList();
-                    for (int k = 0; k < rotationkey.Count(); k++)
-                    {
-                        transformkeydata2.TransformKey.RKey.Add(new RKey
-                        {
+                    for (int k = 0; k < rotationkey.Count(); k++) {
+                        transformkeydata2.TransformKey.RKey.Add(new RKey {
                             Duration = TimeSpan.FromMilliseconds(double.Parse(rotationkey[k].Attribute("tick_time").Value)),
                             Rotation = new Vector3(
                                 float.Parse(rotationkey[k].Attribute("X").Value),
@@ -428,10 +390,8 @@ namespace NetsphereScnTool.Forms
                     }
 
                     var scalekey = transformkey.Where(_ => _.Name == "scale_key").ToList();
-                    for (int l = 0; l < scalekey.Count(); l++)
-                    {
-                        transformkeydata2.TransformKey.SKey.Add(new SKey
-                        {
+                    for (int l = 0; l < scalekey.Count(); l++) {
+                        transformkeydata2.TransformKey.SKey.Add(new SKey {
                             Duration = TimeSpan.FromMilliseconds(double.Parse(scalekey[l].Attribute("tick_time").Value)),
                             Scale = new Vector3(
                                 float.Parse(scalekey[l].Attribute("X").Value),
@@ -443,27 +403,22 @@ namespace NetsphereScnTool.Forms
                 }
 
                 var floatkey = es[i].Elements().ToList()[2].Elements().ToList();
-                for (int m = 0; m < floatkey.Count(); m++)
-                {
-                    transformkeydata2.FloatKeys.Add(new FloatKey
-                    {
+                for (int m = 0; m < floatkey.Count(); m++) {
+                    transformkeydata2.FloatKeys.Add(new FloatKey {
                         Duration = TimeSpan.FromMilliseconds(double.Parse(floatkey[m].Attribute("tick_time").Value)),
                         Alpha = float.Parse(floatkey[m].Attribute("alpha").Value)
                     });
                 }
 
                 var morphkey = es[i].Elements().ToList()[3].Elements().ToList();
-                for (int n = 0; n < morphkey.Count(); n++)
-                {
-                    var m = new MorphKey
-                    {
+                for (int n = 0; n < morphkey.Count(); n++) {
+                    var m = new MorphKey {
                         Duration = TimeSpan.FromMilliseconds(double.Parse(morphkey[n].Attribute("tick_time").Value))
                     };
 
                     var mpl = new List<Vector3>();
                     var mp = morphkey[n].Elements().Where(_ => _.Name == "morph_position").ToList();
-                    for (int o = 0; o < mp.Count; o++)
-                    {
+                    for (int o = 0; o < mp.Count; o++) {
                         mpl.Add(new Vector3(
                             float.Parse(mp[o].Attribute("X").Value),
                             float.Parse(mp[o].Attribute("Y").Value),
@@ -473,8 +428,7 @@ namespace NetsphereScnTool.Forms
 
                     var mrl = new List<Quaternion>();
                     var mr = morphkey[n].Elements().Where(_ => _.Name == "morph_rotation").ToList();
-                    for (int p = 0; p < mr.Count; p++)
-                    {
+                    for (int p = 0; p < mr.Count; p++) {
                         mrl.Add(new Vector3(
                             float.Parse(mr[p].Attribute("X").Value),
                             float.Parse(mr[p].Attribute("Y").Value),
@@ -490,8 +444,7 @@ namespace NetsphereScnTool.Forms
             }
         }
 
-        private enum AnimationType : byte
-        {
+        private enum AnimationType : byte {
             Bone,
             Model
         }

@@ -1,10 +1,8 @@
 ﻿using System;
 
-namespace NetsphereScnTool.Scene
-{
+namespace NetsphereScnTool.Scene {
     [Flags]
-    public enum Shader
-    {
+    public enum Shader {
         None = 0,
         NoLight = 1,
         Transparent = 2,
@@ -22,8 +20,7 @@ namespace NetsphereScnTool.Scene
         Dark = 131072
     }
 
-    public enum ChunkType : uint
-    {
+    public enum ChunkType : uint {
         Box = 0x25ADF0D1, // fumbi, spawns, deadzones
         ModelData = 0x081098F8, // Game::CActorGeometry
         Bone = 0x6D411AD1, // CoreLib::Scene::CBone
@@ -32,8 +29,7 @@ namespace NetsphereScnTool.Scene
         Shape = 0xADEE38A2
     }
 
-    public enum ParentGrade : uint
-    {
+    public enum ParentGrade : uint {
         Father,
         Child,
         Grandson

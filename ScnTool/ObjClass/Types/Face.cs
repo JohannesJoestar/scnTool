@@ -3,10 +3,8 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 
-namespace ObjParser.Types
-{
-    public class Face : IType
-    {
+namespace ObjParser.Types {
+    public class Face : IType {
         public const int MinimumDataLength = 4;
         public const string Prefix = "f";
 
@@ -14,8 +12,7 @@ namespace ObjParser.Types
         public int[] VertexIndexList { get; set; }
         public int[] TextureVertexIndexList { get; set; }
 
-        public void LoadFromStringArray(string[] data)
-        {
+        public void LoadFromStringArray(string[] data) {
             if (data.Length < MinimumDataLength)
                 throw new ArgumentException("Input array must be of minimum length " + MinimumDataLength, "data");
 
@@ -28,8 +25,7 @@ namespace ObjParser.Types
 
             bool success;
 
-            for (int i = 0; i < vcount; i++)
-            {
+            for (int i = 0; i < vcount; i++) {
                 string[] parts = data[i + 1].Split('/');
 
                 success = int.TryParse(parts[0], NumberStyles.Any, CultureInfo.InvariantCulture, out int vindex);
@@ -37,11 +33,9 @@ namespace ObjParser.Types
                     throw new ArgumentException("Could not parse parameter as int");
                 VertexIndexList[i] = vindex;
 
-                if (parts.Count() > 1)
-                {
+                if (parts.Count() > 1) {
                     success = int.TryParse(parts[1], NumberStyles.Any, CultureInfo.InvariantCulture, out vindex);
-                    if (success)
-                    {
+                    if (success) {
                         TextureVertexIndexList[i] = vindex;
                     }
                 }
@@ -50,19 +44,14 @@ namespace ObjParser.Types
 
         // HACKHACK this will write invalid files if there are no texture vertices in
         // the faces, need to identify that and write an alternate format
-        public override string ToString()
-        {
+        public override string ToString() {
             var b = new StringBuilder();
             b.Append("f");
 
-            for (int i = 0; i < VertexIndexList.Count(); i++)
-            {
-                if (i < TextureVertexIndexList.Length)
-                {
+            for (int i = 0; i < VertexIndexList.Count(); i++) {
+                if (i < TextureVertexIndexList.Length) {
                     b.AppendFormat(" {0}/{1}", VertexIndexList[i], TextureVertexIndexList[i]);
-                }
-                else
-                {
+                } else {
                     b.AppendFormat(" {0}", VertexIndexList[i]);
                 }
             }

@@ -10,16 +10,13 @@ using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace CustomListView
-{
+namespace CustomListView {
     /// <summary>
     /// Summary description for OAKListView.
     /// </summary>
-    public class CustomListView : ListView
-    {
+    public class CustomListView : ListView {
         [StructLayoutAttribute(LayoutKind.Sequential)]
-        public struct LV_ITEM
-        {
+        public struct LV_ITEM {
             public uint mask;
             public int iItem;
             public int iSubItem;
@@ -51,14 +48,12 @@ namespace CustomListView
         /// <summary>
         /// Changing the style of listview to accept image on subitems
         /// </summary>
-        public CustomListView()
-        {
+        public CustomListView() {
             // Change the style of listview to accept image on subitems
-            var m = new Message
-            {
+            var m = new Message {
                 HWnd = Handle,
                 Msg = LVM_GETEXTENDEDLISTVIEWSTYLE,
-                LParam = (IntPtr)(LVS_EX_GRIDLINES |
+                LParam = (IntPtr) (LVS_EX_GRIDLINES |
                                 LVS_EX_FULLROWSELECT |
                                 LVS_EX_SUBITEMIMAGES |
                                 LVS_EX_CHECKBOXES |

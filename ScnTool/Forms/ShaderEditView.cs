@@ -5,10 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace NetsphereScnTool.Forms
-{
-    public partial class ShaderEditView : Form
-    {
+namespace NetsphereScnTool.Forms {
+    public partial class ShaderEditView : Form {
         public Shader selectedShader;
 
         private readonly TaskCompletionSource<bool> _tcs;
@@ -16,8 +14,7 @@ namespace NetsphereScnTool.Forms
         private readonly List<CheckBox> cbx;
         private readonly List<Shader> evals;
 
-        public ShaderEditView(Shader shader, TaskCompletionSource<bool> tcs)
-        {
+        public ShaderEditView(Shader shader, TaskCompletionSource<bool> tcs) {
             InitializeComponent();
 
             cbx = Controls.OfType<CheckBox>().Where(c => c != None).ToList();
@@ -25,14 +22,10 @@ namespace NetsphereScnTool.Forms
             evals = Enum.GetValues(typeof(Shader)).Cast<Shader>().Where(s => s != Scene.Shader.None).ToList();
 
             uint i = 0;
-            foreach (var eval in evals)
-            {
-                if (shader.HasFlag(eval))
-                {
-                    foreach (var c in cbx)
-                    {
-                        if (c.Name == eval.ToString())
-                        {
+            foreach (var eval in evals) {
+                if (shader.HasFlag(eval)) {
+                    foreach (var c in cbx) {
+                        if (c.Name == eval.ToString()) {
                             c.Checked = true;
                             i++;
                         }
@@ -46,17 +39,12 @@ namespace NetsphereScnTool.Forms
             _tcs = tcs;
         }
 
-        private void ApplyShader_Click(object sender, EventArgs e)
-        {
+        private void ApplyShader_Click(object sender, EventArgs e) {
             uint i = 0;
-            foreach (var c in cbx)
-            {
-                if (c.Checked == true)
-                {
-                    foreach (var eval in evals)
-                    {
-                        if (c.Name == eval.ToString())
-                        {
+            foreach (var c in cbx) {
+                if (c.Checked == true) {
+                    foreach (var eval in evals) {
+                        if (c.Name == eval.ToString()) {
                             selectedShader |= eval;
                             i++;
                         }
@@ -71,137 +59,117 @@ namespace NetsphereScnTool.Forms
             Hide();
         }
 
-        private void None_CheckedChanged(object sender, EventArgs e)
-        {
-            if (None.Checked == true)
-            {
+        private void None_CheckedChanged(object sender, EventArgs e) {
+            if (None.Checked == true) {
                 foreach (var c in cbx)
                     c.Checked = false;
-            }
-            else
+            } else
                 CheckIfNoShaderChecked();
         }
 
-        private void Transparent_CheckedChanged(object sender, EventArgs e)
-        {
+        private void Transparent_CheckedChanged(object sender, EventArgs e) {
             if (Transparent.Checked == true)
                 None.Checked = false;
             else
                 CheckIfNoShaderChecked();
         }
 
-        private void NoLight_CheckedChanged(object sender, EventArgs e)
-        {
+        private void NoLight_CheckedChanged(object sender, EventArgs e) {
             if (NoLight.Checked == true)
                 None.Checked = false;
             else
                 CheckIfNoShaderChecked();
         }
 
-        private void Cutout_CheckedChanged(object sender, EventArgs e)
-        {
+        private void Cutout_CheckedChanged(object sender, EventArgs e) {
             if (Cutout.Checked == true)
                 None.Checked = false;
             else
                 CheckIfNoShaderChecked();
         }
 
-        private void Billboard_CheckedChanged(object sender, EventArgs e)
-        {
+        private void Billboard_CheckedChanged(object sender, EventArgs e) {
             if (Billboard.Checked == true)
                 None.Checked = false;
             else
                 CheckIfNoShaderChecked();
         }
 
-        private void NoCulling_CheckedChanged(object sender, EventArgs e)
-        {
+        private void NoCulling_CheckedChanged(object sender, EventArgs e) {
             if (NoCulling.Checked == true)
                 None.Checked = false;
             else
                 CheckIfNoShaderChecked();
         }
 
-        private void Flare_CheckedChanged(object sender, EventArgs e)
-        {
+        private void Flare_CheckedChanged(object sender, EventArgs e) {
             if (Flare.Checked == true)
                 None.Checked = false;
             else
                 CheckIfNoShaderChecked();
         }
 
-        private void ZWriteOff_CheckedChanged(object sender, EventArgs e)
-        {
+        private void ZWriteOff_CheckedChanged(object sender, EventArgs e) {
             if (ZWriteOff.Checked == true)
                 None.Checked = false;
             else
                 CheckIfNoShaderChecked();
         }
 
-        private void Shader_CheckedChanged(object sender, EventArgs e)
-        {
+        private void Shader_CheckedChanged(object sender, EventArgs e) {
             if (Shader.Checked == true)
                 None.Checked = false;
             else
                 CheckIfNoShaderChecked();
         }
 
-        private void NoFog_CheckedChanged(object sender, EventArgs e)
-        {
+        private void NoFog_CheckedChanged(object sender, EventArgs e) {
             if (NoFog.Checked == true)
                 None.Checked = false;
             else
                 CheckIfNoShaderChecked();
         }
 
-        private void NoMipmap_CheckedChanged(object sender, EventArgs e)
-        {
+        private void NoMipmap_CheckedChanged(object sender, EventArgs e) {
             if (NoMipmap.Checked == true)
                 None.Checked = false;
             else
                 CheckIfNoShaderChecked();
         }
 
-        private void Shadow_CheckedChanged(object sender, EventArgs e)
-        {
+        private void Shadow_CheckedChanged(object sender, EventArgs e) {
             if (Shadow.Checked == true)
                 None.Checked = false;
             else
                 CheckIfNoShaderChecked();
         }
 
-        private void Water_CheckedChanged(object sender, EventArgs e)
-        {
+        private void Water_CheckedChanged(object sender, EventArgs e) {
             if (Water.Checked == true)
                 None.Checked = false;
             else
                 CheckIfNoShaderChecked();
         }
 
-        private void Distortion_CheckedChanged(object sender, EventArgs e)
-        {
+        private void Distortion_CheckedChanged(object sender, EventArgs e) {
             if (Distortion.Checked == true)
                 None.Checked = false;
             else
                 CheckIfNoShaderChecked();
         }
 
-        private void Dark_CheckedChanged(object sender, EventArgs e)
-        {
+        private void Dark_CheckedChanged(object sender, EventArgs e) {
             if (Dark.Checked == true)
                 None.Checked = false;
             else
                 CheckIfNoShaderChecked();
         }
 
-        private void CheckIfNoShaderChecked()
-        {
+        private void CheckIfNoShaderChecked() {
             uint i = 0;
 
-            foreach (var c in cbx)
-            {
-                if (c.Checked == true)
-                {
+            foreach (var c in cbx) {
+                if (c.Checked == true) {
                     i++;
                 }
             }
